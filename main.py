@@ -37,7 +37,7 @@ def send_expenses(message):
     bot.send_message(chat_id, 'Categories are: transport, petty, staff meals')
 
 @bot.message_handler(commands=['done'])
-def reset():
+def reset(message):
     global counter
     counter = 0
 
@@ -47,7 +47,6 @@ def send_delivery (message):
     counter = 3
     bot.send_message(message.chat.id, 'Send in this format: Partner, invoice, cost, comments (optional)')
     bot.send_message(message.chat.id, 'If there is no invoice, just leave as space. Eg. Lalamove,  , 3, comments')
-
 
 @bot.message_handler(func=lambda m: True) # reply to all other messages (expecting correct answers)
 def reply_all(message):

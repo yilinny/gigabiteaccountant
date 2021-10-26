@@ -15,6 +15,13 @@ from google_sheets_api import store_expenses, store_invoice, store_delivery
 
 bot = telebot.TeleBot(os.getenv('bot-token'))
 
+def check_float(var):
+    try:
+        float(var)
+        return True
+    except ValueError:
+        return False 
+
 def update_expenses(message):
 
     finance_breakdown = message.text.split(',')
@@ -30,11 +37,11 @@ def update_expenses(message):
 
     amount = finance_breakdown[0]
 
-    if amount.isdigit() == False:
+    if check_float(amount) == False:
         bot.send_message(message.chat.id, 'Amount has to be a number. Please send again in right format.')
         return()
     
-    amount = int(amount)
+    amount = float(amount)
 
     if len(finance_breakdown) == 2:
         comments= ''
@@ -71,11 +78,11 @@ def update_invoice(message):
     if len(items) == 3:
         items.append('')
 
-    if items[1].isdigit() == False:
+    if check_float(items[1]) == False:
         bot.send_message(message.chat.id, 'price must be in numbers! please send again' )
         return()
     
-    items[1] = int(items[1])
+    items[1] = float(items[1])
 
     if company == 'dillic packaging':
         if ' x ' in items[3]:
@@ -97,10 +104,10 @@ def update_delivery(message):
     td_date = date.today().strftime("%d/%m/%y")
     data.insert(2, td_date)
 
-    if data[3].isdigit() == False:
+    if check_float(data[3]) == False:
         bot.send_message(message.chat.id, 'Price must be in numbers! please send again' )
         return()
-    data[3] = int(data[3])
+    data[3] = float(data[3])
 
     store_delivery(data)
 
