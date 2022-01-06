@@ -21,17 +21,21 @@ def store_variable(variable, contact,column,sheet_name):
     sheet.update_cell(row, column, variable)
 
 def store_expenses(var, column, comments):
-    sheet= client.open('finance').worksheet('Personal Expenses')
+    sheet= client.open('Costs 2022').worksheet('Misc')
     a = date.today().strftime("%d/%m/%y")
     data= [a, '', '', '', comments]
     data[column] = var
     sheet.append_row(data)
 
-def store_invoice(var, company):
-    sheet= client.open('Food supplier + packaging').worksheet(company)
-    sheet.append_row(var)
+def store_foodinvoice(data):
+    sheet= client.open('Costs 2022').worksheet('Food Suppliers')
+    sheet.append_row(data)
+
+def store_packinvoice(data):
+    sheet= client.open('Costs 2022').worksheet('packaging')
+    sheet.append_row(data, insert_data_option='overwrite')
 
 def store_delivery(var):
-    sheet= client.open('finance').worksheet('delivery cost')
+    sheet= client.open('Costs 2022').worksheet('Delivery')
     sheet.append_row(var)
 

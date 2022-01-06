@@ -7,7 +7,7 @@ from telebot import types
 from dotenv import load_dotenv
 from telebot.util import user_link
 load_dotenv()
-from update_finance import update_expenses, update_invoice, update_delivery
+from update_finance import update_expenses, update_invoice, update_delivery, update_packaging
 
 counter = None 
 
@@ -20,12 +20,19 @@ def menu (message):
     bot.send_message(chat_id, 'Welcome to your finance manager bot. Punch /invoice to input invoice or /expenses to input expenses and /delivery for delivery costs.')
 
 
-@bot.message_handler(commands=['invoice'])
+@bot.message_handler(commands=['foodinvoice'])
 def send_invoice(message):
     global counter 
     counter = 1
     chat_id = message.chat.id
-    bot.send_message(chat_id, '\nSend in this format: \nCompany \nInvoice date, amount payable, invoice number, (optional) items purchased x qty ')
+    bot.send_message(chat_id, 'Send in this format: Company, Invoice date, amount payable, invoice number, (optional) items purchased x qty ')
+
+@bot.message_handler(commands=['packaginginvoice'])
+def send_invoice(message):
+    global counter 
+    counter = 4
+    chat_id = message.chat.id
+    bot.send_message(chat_id, 'Send in this format: Company, Invoice date, amount payable, invoice number, (optional) items purchased x qty ')
 
 
 @bot.message_handler(commands= ['expenses'])
@@ -34,7 +41,7 @@ def send_expenses(message):
     counter = 2
     chat_id = message.chat.id
     bot.send_message(chat_id, 'Send in this format: $$, category, comments (optional). Comma in between is impt. Eg. 3, petty, ntuc')
-    bot.send_message(chat_id, 'Categories are: transport, petty, staff meals')
+    bot.send_message(chat_id, 'Categories are: staff meals, petty, R&D')
 
 @bot.message_handler(commands=['done'])
 def reset(message):
@@ -63,7 +70,9 @@ def reply_all(message):
 
     elif counter ==3:
         update_delivery(message)
-        
+    
+    elif counter == 4:
+        update_packaging(message)
 
 
 bot.polling()
